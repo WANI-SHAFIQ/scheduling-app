@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate Unique Booking Link</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 500px;
+            margin: auto;
+            text-align: center;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+        }
+        input, button {
+            padding: 10px;
+            margin: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .link-container {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+        .link-container a {
+            text-decoration: none;
+            color: #007BFF;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Generate Your Unique Booking Link</h1>
+        <p>Enter your name or any identifier to create a booking link that you can share with others:</p>
+   
+        <input type="text" id="userName" placeholder="Enter your name or identifier">
+     
+        <button onclick="generateBookingLink()">Generate Booking Link</button>
+        <div class="link-container" id="bookingLinkContainer" style="display: none;">
+            <p>Your unique booking link:</p>
+            <a id="bookingLink" href="" target="_blank">Share this link</a>
+        </div>
+    </div>
+
+    <script>
+        function generateBookingLink() {
+            var userName = document.getElementById("userName").value;
+            
+            if(userName.trim() === "") {
+                alert("Please enter a valid name or identifier.");
+                return;
+            }
+            var uniqueID = new Date().getTime();
+            var bookingLink = "https://example.com/booking/" + userName + "/" + uniqueID;
+            var bookingLinkContainer = document.getElementById("bookingLinkContainer");
+            var bookingLinkElement = document.getElementById("bookingLink");
+            bookingLinkElement.href = bookingLink;
+            bookingLinkElement.textContent = bookingLink;
+            bookingLinkContainer.style.display = "block";
+        }
+    </script>
+
+</body>
+</html>
