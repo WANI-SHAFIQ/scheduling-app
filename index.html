@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Appointment Booking</title>
+  <style>
+    .container {
+      width: 50%;
+      margin: 0 auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background-color: #f9f9f9;
+    }
+    h1, h2 {
+      text-align: center;
+    }
+    .availability-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+    }
+    .slot {
+      width: 150px;
+      margin: 10px;
+      padding: 10px;
+      text-align: center;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .slot.booked {
+      background-color: #dc3545;
+      color: black;
+      text-decoration: line-through;
+      cursor: not-allowed;
+    }
+    .slot.available {
+        background-color: #28a745;
+    }
+    .slot.available:hover{
+        background-color: #a1a4a1;
+    }
+    #booking-form-container {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .form-container, #confirmation-message, #appointments-container {
+      margin-top: 20px;
+      text-align: center;
+    }
+    .appointment {
+      margin: 10px;
+      background-color: #f1f1f1;
+      padding: 10px;
+      border-radius: 8px;
+    }
+    #book-button{
+        color: white;
+        background-color: crimson;
+        border: none;
+        border-radius: 5px;
+        padding: 4px 5px;
+    }
+    .appointment button {
+      margin-top: 10px;
+    }
+    #edit-button{
+        color: black;
+        background-color:#C1C4FF;
+        border: none;
+        border-radius: 5px;
+        padding: 5px 8px; 
+    }
+    #cancel-button{
+        color: black;
+        background-color:#f5818e;
+        border: none;
+        border-radius: 5px;
+        padding: 5px 8px; 
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Appointment Booking System</h1>
+    <div class="availability-list" id="availability-list">
+    </div>
+
+    <div class="form-container" id="booking-form-container" style="display: none;">
+      <h2>Book an Appointment</h2>
+      <input type="text" id="user-name" placeholder="Enter your name" required>
+      <button id="book-button" onclick="bookAppointment()">Book Now</button>
+    </div>
+
+    <div id="confirmation-message"></div>
+
+    <div id="appointments-container">
+      <h2>Your Appointments</h2>
+    </div>
+  </div>
+
+  <script>
+    const availableSlots = [
+      { time: '09:00 AM', booked: false },
+      { time: '10:00 AM', booked: false },
+      { time: '11:00 AM', booked: false },
+      { time: '01:00 PM', booked: false },
+      { time: '02:00 PM', booked: false },
+      { time: '03:00 PM', booked: false },
+      { time: '04:00 PM', booked: false },
+    ];
+
+    let appointments = [];
+
+    function displayAvailableSlots() {
+      const slotContainer = document.getElementById('availability-list');
+      slotContainer.innerHTML = '';
+
+      availableSlots.forEach((slot, index) => {
+        const slotElement = document.createElement('div');
+        slotElement.classList.add('slot');
+        slotElement.textContent = slot.time;
+
+        if (slot.booked) {
+          slotElement.classList.add('booked');
+        } else {
+          slotElement.classList.add('available');
+          slotElement.onclick = function () {
+            selectSlot(index);
+          };
+        }
+
+        slotContainer.appendChild(slotElement);
+      });
+    }
+
+    function selectSlot(index) {
+      if (availableSlots[index].booked) {
+        return;
+      }
+
+      const bookingFormContainer = document.getElementById('booking-form-container');
+      bookingFormContainer.style.display = 'block';
+
+      window.selectedSlotIndex = index;
+    }
+
+    function bookAppointment() {
+      const userName = document.getElementById('user-name').value;
+
+      if (!userName) {
+        alert('Please enter your name.');
+        return;
+      }
+
+      availableSlots[window.selectedSlotIndex].booked = true;
+
+      const appointment = {
+        userName: userName,
+        appointmentTime: availableSlots[window.selectedSlotIndex].time
+      };
+      appointments.push(appointment);
+
+      displayAvailableSlots();
+
+      const bookingFormContainer = document.getElementById('booking-form-container');
+      bookingFormContainer.style.display = 'none';
+
+      const confirmationMessage = document.getElementById('confirmation-message');
+      confirmationMessage.textContent = `Thank you, ${userName}. Your appointment for ${availableSlots[window.selectedSlotIndex].time} has been booked.`;
+
+      displayAppointments();
+    }
+
+    function displayAppointments() {
+      const appointmentsContainer = document.getElementById('appointments-container');
+      appointmentsContainer.innerHTML = `<h2>Your Appointments</h2>`;
+      
+      appointments.forEach((appointment, index) => {
+        const appointmentDiv = document.createElement('div');
+        appointmentDiv.classList.add('appointment');
+        appointmentDiv.innerHTML = `
+          <p><strong>${appointment.userName}</strong> - ${appointment.appointmentTime}</p>
+          <button id="edit-button" onclick="editAppointment(${index})">Edit</button>
+          <button id="cancel-button" onclick="cancelAppointment(${index})">Cancel</button>
+        `;
+        appointmentsContainer.appendChild(appointmentDiv);
+      });
+    }
+
+    function editAppointment(index) {
+      const newTime = prompt("Enter a new time for your appointment:", appointments[index].appointmentTime);
+      if (newTime && availableSlots.some(slot => slot.time === newTime && !slot.booked)) {
+        const oldTime = appointments[index].appointmentTime;
+        appointments[index].appointmentTime = newTime;
+
+        availableSlots.find(slot => slot.time === oldTime).booked = false;
+        availableSlots.find(slot => slot.time === newTime).booked = true;
+
+        displayAvailableSlots();
+        displayAppointments();
+      } else {
+        alert("The new time is unavailable or invalid.");
+      }
+    }
+
+    function cancelAppointment(index) {
+      const canceledTime = appointments[index].appointmentTime;
+      availableSlots.find(slot => slot.time === canceledTime).booked = false;
+
+      appointments.splice(index, 1);
+
+      displayAvailableSlots();
+      displayAppointments();
+    }
+
+    displayAvailableSlots();
+  </script>
+
+</body>
+</html>
