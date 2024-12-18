@@ -17,9 +17,26 @@
             color: white;
             text-align: center;
             padding: 1rem;
+            position: relative;
         }
 
-        .container {
+        .pay-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #ff5722;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .pay-button:hover {
+            background-color: #19e623;
+        }
+
+        .parent {
             padding: 2rem;
         }
 
@@ -51,7 +68,7 @@
         }
 
         button:hover {
-            background-color: #45a049;
+            background-color: #f70000;
         }
 
         .availability-list {
@@ -76,14 +93,16 @@
 <body>
     <header>
         <h1>Scheduling App</h1>
+        <button class="pay-button" onclick="redirectToPayment()">Pay 999 INR</button>
     </header>
 
-    <div class="container">
+    <div class="parent">
         <section id="set-availability">
             <h2>Set Availability</h2>
             <div class="form-group">
                 <label for="day">Day:</label>
-                <select id="day">
+                <input type="date">
+                <!-- <select id="day">
                     <option value="Monday">Monday</option>
                     <option value="Tuesday">Tuesday</option>
                     <option value="Wednesday">Wednesday</option>
@@ -91,7 +110,7 @@
                     <option value="Friday">Friday</option>
                     <option value="Saturday">Saturday</option>
                     <option value="Sunday">Sunday</option>
-                </select>
+                </select> -->
             </div>
             <div class="form-group">
                 <label for="start-time">Start Time:</label>
@@ -131,13 +150,18 @@
 
                 availabilityList.appendChild(availabilityItem);
 
-                // Clear input fields
+                
                 document.getElementById('day').value = '';
                 document.getElementById('start-time').value = '';
                 document.getElementById('end-time').value = '';
             } else {
                 alert('Please fill all fields!');
             }
+        }
+
+        
+        function redirectToPayment() {
+            window.location.href = 'PaymentIntegrationPage.html'; 
         }
     </script>
 </body>
