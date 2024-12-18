@@ -49,9 +49,7 @@
             margin-bottom: 0.5rem;
         }
 
-        .form-group input, 
-        .form-group textarea, 
-        .form-group select {
+        .form-group input {
             width: 100%;
             padding: 0.5rem;
             border: 1px solid #ccc;
@@ -97,20 +95,12 @@
     </header>
 
     <div class="parent">
+        <!-- Set Availability Section -->
         <section id="set-availability">
             <h2>Set Availability</h2>
             <div class="form-group">
                 <label for="day">Day:</label>
-                <input type="date">
-                <!-- <select id="day">
-                    <option value="Monday">Monday</option>
-                    <option value="Tuesday">Tuesday</option>
-                    <option value="Wednesday">Wednesday</option>
-                    <option value="Thursday">Thursday</option>
-                    <option value="Friday">Friday</option>
-                    <option value="Saturday">Saturday</option>
-                    <option value="Sunday">Sunday</option>
-                </select> -->
+                <input type="date" id="day">
             </div>
             <div class="form-group">
                 <label for="start-time">Start Time:</label>
@@ -125,6 +115,10 @@
             <div class="availability-list" id="availability-list"></div>
         </section>
 
+        <!-- Button to Navigate to Group Event Page -->
+        <button onclick="redirectToGroupEvent()">Group Event</button>
+
+        <!-- Booking Section -->
         <section id="booking">
             <h2>Booking</h2>
             <p>Share your unique booking link: <a href="#">example.com/user-booking</a></p>
@@ -150,7 +144,7 @@
 
                 availabilityList.appendChild(availabilityItem);
 
-                
+                // Clear inputs
                 document.getElementById('day').value = '';
                 document.getElementById('start-time').value = '';
                 document.getElementById('end-time').value = '';
@@ -159,9 +153,12 @@
             }
         }
 
-        
         function redirectToPayment() {
             window.location.href = 'PaymentIntegrationPage.html'; 
+        }
+
+        function redirectToGroupEvent() {
+            window.location.href = 'groupEventPage.html';
         }
     </script>
 </body>

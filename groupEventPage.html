@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Group Event</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        header {
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .parent {
+            padding: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #f70000;
+        }
+
+        .group-events-list {
+            margin-top: 1rem;
+        }
+
+        .group-event-item {
+            padding: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Group Event</h1>
+    </header>
+
+    <div class="parent">
+        <div class="form-group">
+            <label for="event-name">Event Name:</label>
+            <input type="text" id="event-name" placeholder="Enter event name">
+        </div>
+        <div class="form-group">
+            <label for="event-date">Date:</label>
+            <input type="date" id="event-date">
+        </div>
+        <div class="form-group">
+            <label for="event-time">Time:</label>
+            <input type="time" id="event-time">
+        </div>
+        <div class="form-group">
+            <label for="max-participants">Max Participants:</label>
+            <input type="number" id="max-participants" placeholder="Enter max participants">
+        </div>
+        <button onclick="createGroupEvent()">Create Group Event</button>
+
+        <div class="group-events-list" id="group-events-list"></div>
+    </div>
+
+    <script>
+        const groupEventsList = document.getElementById('group-events-list');
+
+        function createGroupEvent() {
+            const eventName = document.getElementById('event-name').value;
+            const eventDate = document.getElementById('event-date').value;
+            const eventTime = document.getElementById('event-time').value;
+            const maxParticipants = document.getElementById('max-participants').value;
+
+            if (eventName && eventDate && eventTime && maxParticipants) {
+                const groupEventItem = document.createElement('div');
+                groupEventItem.classList.add('group-event-item');
+                groupEventItem.innerHTML = `
+                    <strong>${eventName}</strong><br>
+                    Date: ${eventDate}<br>
+                    Time: ${eventTime}<br>
+                    Max Participants: ${maxParticipants}
+                `;
+
+                groupEventsList.appendChild(groupEventItem);
+
+                // Clear inputs
+                document.getElementById('event-name').value = '';
+                document.getElementById('event-date').value = '';
+                document.getElementById('event-time').value = '';
+                document.getElementById('max-participants').value = '';
+            } else {
+                alert('Please fill all fields!');
+            }
+        }
+    </script>
+</body>
+</html>
