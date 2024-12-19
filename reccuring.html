@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recurring Appointments</title>
+    <style>
+        /* style.css */
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #4f46e5, #4338ca);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 600px;
+}
+
+h1 {
+    text-align: center;
+}
+
+.appointment-form {
+    margin-bottom: 20px;
+    
+}
+
+.appointment-form label {
+    display: block;
+    margin-top: 10px;
+}
+
+.appointment-form input, .appointment-form select {
+    width: 97%;
+    padding: 8px;
+    margin: 8px 0;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #4f46e5;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #827cef;
+}
+
+.appointments-list {
+    margin-top: 20px;
+}
+
+.appointments-list ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.appointments-list li {
+    background: linear-gradient(135deg, #4f46e5, #4338ca);
+    color: white;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+}
+#occurrences{
+    scroll-margin-right: 8px;
+}
+
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Recurring Appointment Scheduler</h1>
+
+        <!-- Appointment Form -->
+        <div class="appointment-form">
+            <label for="appointment-time">Select Appointment Time:</label>
+            <input type="datetime-local" id="appointment-time">
+
+            <label for="recurrence-type">Recurrence:</label>
+            <select id="recurrence-type">
+                <option value="daily">Daily</option>
+                <option value="weekly">Weekly</option>
+                <option value="monthly">Monthly</option>
+            </select>
+
+            <label for="occurrences">Number of Occurrences:</label>
+            <input type="number" id="occurrences" value="5" min="1">
+
+            <button id="generate-appointments">Generate Appointments</button>
+        </div>
+
+        <!-- Display Recurring Appointments -->
+        <div class="appointments-list">
+            <h3>Upcoming Appointments:</h3>
+            <ul id="appointments-list"></ul>
+        </div>
+    </div>
+
+</body>
+</html>
+<script>
+    // app.js
+
+// Helper function to format date and time
+function formatDate(date) {
+    return date.toLocaleString();
+}
+
+// Function to generate recurring appointments
+function generateRecurringAppointments() {
+    const appointmentTime = document.getElementById('appointment-time').value;
+    const recurrenceType = document.getElementById('recurrence-type').value;
+    const occurrences = parseInt(document.getElementById('occurrences').value, 10);
+
+    if (!appointmentTime || occurrences < 1) {
+        alert('Please select a valid time and number of occurrences.');
+        return;
+    }
+
+    const startDate = new Date(appointmentTime);
+    const appointments = [];
+
+    for (let i = 0; i < occurrences; i++) {
+        let nextAppointment = new Date(startDate);
+
+        switch (recurrenceType) {
+            case 'daily':
+                nextAppointment.setDate(startDate.getDate() + i);
+                break;
+            case 'weekly':
+                nextAppointment.setDate(startDate.getDate() + i * 7);
+                break;
+            case 'monthly':
+                nextAppointment.setMonth(startDate.getMonth() + i);
+                break;
+            default:
+                break;
+        }
+
+        appointments.push(nextAppointment);
+    }
+
+    // Display the generated appointments
+    displayAppointments(appointments);
+}
+
+// Function to display the list of generated appointments
+function displayAppointments(appointments) {
+    const appointmentsList = document.getElementById('appointments-list');
+    appointmentsList.innerHTML = ''; // Clear existing appointments
+
+    appointments.forEach((appointment) => {
+        const listItem = document.createElement('li');
+        listItem.textContent = formatDate(appointment);
+        appointmentsList.appendChild(listItem);
+    });
+}
+
+// Event listener for the "Generate Appointments" button
+document.getElementById('generate-appointments').addEventListener('click', generateRecurringAppointments);
+
+</script>
