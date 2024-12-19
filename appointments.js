@@ -23,11 +23,11 @@
         }
 
         function redirectToPayment() {
-            window.location.href = 'PaymentIntegrationPage.html'; 
+            window.location.href = 'payment.html'; 
         }
 
         function redirectToGroupEvent() {
-            window.location.href = 'groupEventPage.html';
+            window.location.href = 'groupEvents.html';
         }
 
         function redirectToAboutUsPage(){

@@ -13,7 +13,7 @@
         }
 
         header {
-            background-color: #4CAF50;
+            background-color: #4f41df;
             color: white;
             text-align: center;
             padding: 1rem;
@@ -24,7 +24,7 @@
             position: absolute;
             top: 10px;
             right: 10px;
-            background-color: rgb(0, 87, 158);
+            background-color: #827ae7;
             color: white;
             border: none;
             padding: 0.75rem 1.5rem;
@@ -33,7 +33,7 @@
         }
 
         .pay-button:hover {
-            background-color: #19e623;
+            background-color: #827ae7;
         }
 
         .parent {
@@ -57,7 +57,7 @@
         }
 
         button {
-            background-color: #4CAF50;
+            background-color: #827ae7;
             color: white;
             border: none;
             padding: 0.75rem 1.5rem;
@@ -66,7 +66,7 @@
         }
 
         button:hover {
-            background-color: #f70000;
+            background-color: #827ae7;
         }
 
         .availability-list {
@@ -88,17 +88,17 @@
         }
 
         nav > button{
-            background-color: rgb(0, 87, 158);
+            background-color: #827ae7;
             margin: 20px;
         }
 
         .nav-button:hover {
-            background-color: #19e623;
+            background-color: #827ae7;
         }
     </style>
 </head>
 <body>
-    <header>
+    <header style="border: 2px solid black; border-radius: 1%; margin-top: 2%; width: 95%; margin-left: 1%;">
         <h1>Scheduling App</h1>
         <button class="pay-button" onclick="redirectToPayment()">Pay 999 INR</button>
         <nav>
@@ -109,7 +109,7 @@
         </nav>
     </header>
 
-    <div class="parent">
+    <div class="parent" style="width: 80%; display: flex; justify-content: center; align-items: center; box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px; margin-left: 7%; margin-top: 4%;">
         <!-- Set Availability Section -->
         <section id="set-availability">
             <h2>Set Availability</h2>
@@ -131,14 +131,18 @@
         </section>
 
         <!-- Button to Navigate to Group Event Page -->
-        <button onclick="redirectToGroupEvent()">Group Event</button>
+        
 
         <!-- Booking Section -->
-        <section id="booking">
+        <section id="booking" style="margin: 15%;">
             <h2>Booking</h2>
             <p>Share your unique booking link: <a href="#">example.com/user-booking</a></p>
         </section>
     </div>
+    <div >
+        <button onclick="redirectToGroupEvent()" style="margin-top: 10px; margin-left: 180px;">Group Event</button>
+    </div>
+    
 
     <footer class="footer">
         &copy; 2024 Scheduling App
