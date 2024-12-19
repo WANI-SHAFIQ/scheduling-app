@@ -24,7 +24,7 @@
             position: absolute;
             top: 10px;
             right: 10px;
-            background-color: #ff5722;
+            background-color: rgb(0, 87, 158);
             color: white;
             border: none;
             padding: 0.75rem 1.5rem;
@@ -86,12 +86,27 @@
             background-color: #f1f1f1;
             margin-top: 2rem;
         }
+
+        nav > button{
+            background-color: rgb(0, 87, 158);
+            margin: 20px;
+        }
+
+        .nav-button:hover {
+            background-color: #19e623;
+        }
     </style>
 </head>
 <body>
     <header>
         <h1>Scheduling App</h1>
         <button class="pay-button" onclick="redirectToPayment()">Pay 999 INR</button>
+        <nav>
+            <button class="nav-button" onclick="redirectToPayment()">Payment</button>
+            <button class="nav-button" onclick="redirectToGroupEvent()">Group Event</button>
+            <button class="nav-button" onclick="redirectToAboutUsPage()">About Us</button>
+            <button class="nav-button">Contact</button>
+        </nav>
     </header>
 
     <div class="parent">
@@ -159,6 +174,10 @@
 
         function redirectToGroupEvent() {
             window.location.href = 'groupEventPage.html';
+        }
+
+        function redirectToAboutUsPage(){
+            window.location.href = 'aboutUsPage.html'
         }
     </script>
 </body>
