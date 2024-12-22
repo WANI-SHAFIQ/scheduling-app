@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Appointment Scheduling with Buffer Time</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f9;
+      }
+
+      .container {
+        max-width: 600px;
+        margin: 50px auto;
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      h1 {
+        text-align: center;
+        color: #333;
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+      }
+
+      label {
+        margin-top: 10px;
+        font-weight: bold;
+      }
+
+      input[type="datetime-local"],
+      input[type="number"] {
+        padding: 8px;
+        margin-top: 5px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+
+      button {
+        background-color: #007bff;
+        color: white;
+        padding: 10px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+
+      button:hover {
+        background-color: #0056b3;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      #appointment-summary {
+        margin-top: 20px;
+        background-color: #f8f8f8;
+        padding: 15px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+
+      #appointment-summary p {
+        font-size: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Appointment Scheduling</h1>
+      <form id="appointment-form">
+        <label for="appointment-time">Select Appointment Time:</label>
+        <input
+          type="datetime-local"
+          id="appointment-time"
+          name="appointment-time"
+          required
+        />
+
+        <label for="buffer-before">Buffer Time Before (minutes):</label>
+        <input
+          type="number"
+          id="buffer-before"
+          name="buffer-before"
+          min="0"
+          value="10"
+        />
+
+        <label for="buffer-after">Buffer Time After (minutes):</label>
+        <input
+          type="number"
+          id="buffer-after"
+          name="buffer-after"
+          min="0"
+          value="10"
+        />
+
+        <button type="submit">Schedule Appointment</button>
+      </form>
+
+      <div id="appointment-summary" class="hidden">
+        <h2>Scheduled Appointment Summary</h2>
+        <p>
+          <strong>Original Appointment Time:</strong>
+          <span id="original-time"></span>
+        </p>
+        <p>
+          <strong>Buffer Time Before:</strong>
+          <span id="buffer-before-display"></span> minutes
+        </p>
+        <p>
+          <strong>Buffer Time After:</strong>
+          <span id="buffer-after-display"></span> minutes
+        </p>
+        <p>
+          <strong>Adjusted Appointment Time:</strong>
+          <span id="adjusted-time"></span>
+        </p>
+      </div>
+    </div>
+
+    <script>
+      document
+        .getElementById("appointment-form")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+
+          const appointmentTime =
+            document.getElementById("appointment-time").value;
+          const bufferBefore = parseInt(
+            document.getElementById("buffer-before").value,
+            10
+          );
+          const bufferAfter = parseInt(
+            document.getElementById("buffer-after").value,
+            10
+          );
+          const appointmentDate = new Date(appointmentTime);
+
+          const bufferBeforeTime = new Date(
+            appointmentDate.getTime() - bufferBefore * 60000
+          );
+          const bufferAfterTime = new Date(
+            appointmentDate.getTime() + bufferAfter * 60000
+          );
+          document.getElementById("original-time").textContent =
+            appointmentDate.toLocaleString();
+          document.getElementById("buffer-before-display").textContent =
+            bufferBefore;
+          document.getElementById("buffer-after-display").textContent =
+            bufferAfter;
+          document.getElementById("adjusted-time").textContent =
+            bufferAfterTime.toLocaleString();
+          document.getElementById("appointment-form").style.display = "none";
+          document
+            .getElementById("appointment-summary")
+            .classList.remove("hidden");
+        });
+    </script>
+  </body>
+</html>

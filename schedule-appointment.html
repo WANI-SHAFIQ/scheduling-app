@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Appointment Booking</title>
+    <style>
+      body {
+        background: linear-gradient(135deg, #4f46e5, #4338ca);
+        color: #333;
+        font-family: Arial, sans-serif;
+      }
+      .container {
+        width: 50%;
+        margin: 50px auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+      }
+      h1,
+      h2 {
+        text-align: center;
+        color: #333;
+      }
+      .availability-list {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+      }
+      .slot {
+        width: 150px;
+        margin: 10px;
+        padding: 10px;
+        text-align: center;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+      }
+      .slot.booked {
+        background-color: #9d9b9b;
+        color: black;
+        text-decoration: line-through;
+        cursor: not-allowed;
+      }
+      .slot.available {
+        background-color: #4f46e5;
+      }
+      .slot.available:hover {
+        background-color: #928efd;
+      }
+      #booking-form-container {
+        text-align: center;
+        margin-top: 20px;
+        display: none;
+      }
+      .form-container input {
+        padding: 8px;
+        width: 80%;
+        margin-bottom: 10px;
+      }
+      .form-container button {
+        padding: 10px 20px;
+        background-color: #4f46e5;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      .form-container button:hover {
+        background-color: #4338ca;
+      }
+      #confirmation-message {
+        text-align: center;
+        color: green;
+        margin-top: 20px;
+      }
+      #appointments-container {
+        margin-top: 20px;
+        text-align: center;
+      }
+      .appointment {
+        margin: 10px;
+        background-color: #f1f1f1;
+        padding: 10px;
+        border-radius: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Appointment Booking System</h1>
+
+      <!-- Available slots -->
+      <div class="availability-list" id="availability-list"></div>
+
+      <!-- Booking form -->
+      <div id="booking-form-container" class="form-container">
+        <h2>Book an Appointment</h2>
+        <input
+          type="text"
+          id="user-name"
+          placeholder="Enter your name"
+          required
+        />
+        <button id="book-button" onclick="bookAppointment()">Book Now</button>
+      </div>
+
+      <!-- Confirmation message -->
+      <div id="confirmation-message"></div>
+
+      <!-- Appointments list -->
+      <div id="appointments-container">
+        <h2>Your Appointments</h2>
+      </div>
+    </div>
+
+    <!-- Include the JavaScript file -->
+    <script type="module" src="schedule-appointment.js"></script>
+  </body>
+</html>
