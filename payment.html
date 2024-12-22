@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Payment Page</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        background-color: #f9f9f9;
+      }
+
+      .container {
+        max-width: 400px;
+        margin: 50px auto;
+        padding: 2rem;
+        background: white;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+      }
+
+      h1 {
+        text-align: center;
+        color: #333;
+      }
+
+      .form-group {
+        margin-bottom: 1.5rem;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: bold;
+      }
+
+      .form-group input {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+
+      .form-group input:focus {
+        outline: none;
+        border-color: #827ae7;
+      }
+
+      .pay-button {
+        background-color: #827ae7;
+        color: white;
+        border: none;
+        width: 100%;
+        padding: 0.75rem;
+        font-size: 1rem;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      .pay-button:hover {
+        background-color: #827ae7;
+      }
+
+      .success-message {
+        text-align: center;
+        margin-top: 2rem;
+        font-size: 1.2rem;
+        color: #827ae7;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Payment Page</h1>
+      <form id="payment-form" onsubmit="processPayment(event)">
+        <div class="form-group">
+          <label for="card-name">Name on Card:</label>
+          <input
+            type="text"
+            id="card-name"
+            placeholder="Please Enter Your Name as on your card"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="card-number">Card Number:</label>
+          <input
+            type="text"
+            id="card-number"
+            placeholder="1234 5678 9012 3456"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="expiry-date">Expiry Date:</label>
+          <input type="text" id="expiry-date" placeholder="MM/YY" required />
+        </div>
+        <div class="form-group">
+          <label for="cvv">CVV:</label>
+          <input type="text" id="cvv" placeholder="***" required />
+        </div>
+        <button type="submit" class="pay-button">Pay 999 INR</button>
+      </form>
+      <div class="success-message" id="success-message" style="display: none">
+        Payment Successful! Thank you for your booking.
+      </div>
+    </div>
+
+    <script>
+      function processPayment(event) {
+        event.preventDefault();
+        setTimeout(() => {
+          document.getElementById("payment-form").style.display = "none";
+          document.getElementById("success-message").style.display = "block";
+        }, 1000);
+      }
+    </script>
+  </body>
+</html>

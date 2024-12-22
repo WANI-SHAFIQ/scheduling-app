@@ -3,25 +3,32 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Signup</title>
-    <link rel="stylesheet" href="style.css" />
+    <title>Sign Up - Scheduling App</title>
+    <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <div class="form-container">
-      <h2>Signup</h2>
+      <h2>Sign Up</h2>
       <form id="signup-form">
+        <!-- Full Name Input -->
+        <input type="text" id="signup-name" placeholder="Full Name" required />
+
+        <!-- Email Input -->
         <input type="email" id="signup-email" placeholder="Email" required />
+
+        <!-- Password Input -->
         <input
           type="password"
           id="signup-password"
           placeholder="Password"
           required
         />
+
         <button type="submit" class="btn">Sign Up</button>
       </form>
       <p>Already have an account? <a href="index.html">Login</a></p>
     </div>
 
-    <script type="module" src="auth.js"></script>
+    <script type="module" src="script.js"></script>
   </body>
 </html>

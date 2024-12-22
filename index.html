@@ -3,25 +3,36 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login</title>
-    <link rel="stylesheet" href="style.css" />
+    <title>Login - Scheduling App</title>
+    <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <div class="form-container">
-      <h2>Login</h2>
+      <!-- Welcome message -->
+      <h2 id="welcome-message">Welcome back! Ready to manage your schedule?</h2>
+
       <form id="login-form">
-        <input type="email" id="login-email" placeholder="Email" required />
+        <input
+          type="email"
+          id="login-email"
+          placeholder="Email"
+          required
+          aria-label="Enter your email address"
+        />
         <input
           type="password"
           id="login-password"
           placeholder="Password"
           required
+          aria-label="Enter your password"
         />
         <button type="submit" class="btn">Login</button>
       </form>
-      <p>Don't have an account? <a href="signup.html">Sign Up</a></p>
+      <p class="account-info">
+        Don't have an account? <a href="signup.html">Create one here</a>
+      </p>
     </div>
 
-    <script type="module" src="auth.js"></script>
+    <script type="module" src="script.js"></script>
   </body>
 </html>

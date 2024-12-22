@@ -36,9 +36,18 @@ h2 {
   font-size: 2rem;
 }
 
+/* Welcome Message */
+#welcome-message {
+  margin-bottom: 1rem;
+  font-size: 1.3rem;
+  color: #333;
+  font-weight: 600;
+}
+
 /* Input Fields */
 input[type="email"],
-input[type="password"] {
+input[type="password"],
+input[type="text"] {
   width: 100%;
   padding: 0.8rem;
   margin: 0.5rem 0;
@@ -83,6 +92,21 @@ a {
 
 a:hover {
   color: #d1d1d1;
+}
+
+/* Signup Message */
+.signup-message {
+  font-size: 0.9em;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.signup-message a {
+  color: #6e8efb;
+}
+
+.signup-message a:hover {
+  text-decoration: underline;
 }
 
 /* Animation */

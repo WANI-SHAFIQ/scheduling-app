@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Timezone Calendar</title>
+    <style>
+      body {
+        font-family: "Poppins", sans-serif;
+        background: linear-gradient(135deg, #6e8efb, #a777e3);
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        color: #333;
+      }
+
+      .calendar-container {
+        width: 100%;
+        max-width: 900px;
+        background-color: #fff;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      }
+
+      .timezone-selector {
+        padding: 15px;
+        background: #f8f9fa;
+        border-bottom: 1px solid #ddd;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .timezone-selector select {
+        padding: 8px;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        font-size: 14px;
+        min-width: 200px;
+      }
+
+      .calendar-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px;
+        background: linear-gradient(90deg, #4a90e2, #8a2be2);
+        color: white;
+      }
+
+      .calendar-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        grid-gap: 5px;
+        padding: 20px;
+      }
+
+      .calendar-day-header {
+        text-align: center;
+        font-weight: bold;
+      }
+
+      .calendar-day {
+        padding: 10px;
+        text-align: center;
+        cursor: pointer;
+        position: relative;
+      }
+
+      .event {
+        background-color: #4a90e2;
+        color: white;
+        padding: 8px;
+        border-radius: 5px;
+        font-size: 0.9em;
+        margin-top: 5px;
+      }
+
+      .event-title {
+        font-weight: bold;
+        margin-bottom: 3px;
+      }
+
+      .event-time {
+        font-size: 0.8em;
+        opacity: 0.8;
+        margin-top: 2px;
+      }
+
+      .timezone-info {
+        font-size: 0.8em;
+        color: #666;
+        margin-top: 5px;
+      }
+
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+      }
+
+      .modal-content {
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        width: 90%;
+        max-width: 400px;
+      }
+
+      .modal-buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
+      }
+
+      .timezone-convert {
+        margin-top: 10px;
+        padding: 10px;
+        background-color: #f8f9fa;
+        border-radius: 5px;
+        font-size: 0.9em;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="calendar-container">
+      <div class="timezone-selector">
+        <select id="timezoneSelect"></select>
+        <span id="currentTime"></span>
+      </div>
+      <div class="calendar-header">
+        <button id="prev-month">&lt; Prev</button>
+        <h2 id="current-month">December 2024</h2>
+        <button id="next-month">Next &gt;</button>
+      </div>
+      <div class="calendar-grid" id="calendar-grid">
+        <div class="calendar-day-header">Sun</div>
+        <div class="calendar-day-header">Mon</div>
+        <div class="calendar-day-header">Tue</div>
+        <div class="calendar-day-header">Wed</div>
+        <div class="calendar-day-header">Thu</div>
+        <div class="calendar-day-header">Fri</div>
+        <div class="calendar-day-header">Sat</div>
+      </div>
+    </div>
+
+    <!-- Enhanced Event Modal -->
+    <div class="modal" id="eventModal">
+      <div class="modal-content">
+        <div class="date-display" id="modalDate"></div>
+        <input type="text" id="eventTitle" placeholder="Event Title" />
+        <textarea
+          id="eventDescription"
+          placeholder="Event Description"
+          rows="3"
+        ></textarea>
+        <div class="time-inputs">
+          <input type="time" id="eventStartTime" />
+          <input type="time" id="eventEndTime" />
+        </div>
+        <div class="timezone-convert" id="timezoneConvert"></div>
+        <input type="hidden" id="eventId" />
+        <div class="modal-buttons">
+          <button class="cancel-btn" onclick="calendar.closeModal()">
+            Cancel
+          </button>
+          <button class="save-btn" onclick="calendar.saveEvent()">
+            Save Event
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      class TimezoneCalendar {
+        constructor() {
+          this.currentDate = new Date();
+          this.events = this.loadEvents();
+          this.selectedDate = null;
+          this.editingEventId = null;
+          this.userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+          this.init();
+        }
+
+        init() {
+          this.setupTimezoneSelector();
+          this.setupEventListeners();
+          this.renderCalendar();
+          this.updateCurrentTime();
+          setInterval(() => this.updateCurrentTime(), 1000);
+        }
+
+        setupTimezoneSelector() {
+          const select = document.getElementById("timezoneSelect");
+          const timezones = this.getTimezones();
+
+          timezones.forEach((tz) => {
+            const option = document.createElement("option");
+            option.value = tz;
+            option.textContent = tz;
+            if (tz === this.userTimezone) {
+              option.selected = true;
+            }
+            select.appendChild(option);
+          });
+        }
+
+        getTimezones() {
+          return [
+            "America/New_York",
+            "America/Chicago",
+            "America/Los_Angeles",
+            "Europe/London",
+            "Europe/Paris",
+            "Asia/Tokyo",
+            "Asia/Shanghai",
+            "Australia/Sydney",
+            "Pacific/Auckland",
+          ].sort();
+        }
+
+        updateCurrentTime() {
+          const currentTime = document.getElementById("currentTime");
+          const selectedTimezone =
+            document.getElementById("timezoneSelect").value;
+          const now = new Date();
+
+          currentTime.textContent = now.toLocaleString("en-US", {
+            timeZone: selectedTimezone,
+            dateStyle: "medium",
+            timeStyle: "medium",
+          });
+        }
+
+        loadEvents() {
+          const events = localStorage.getItem("calendarEvents");
+          return events ? JSON.parse(events) : {};
+        }
+
+        saveEvents() {
+          localStorage.setItem("calendarEvents", JSON.stringify(this.events));
+        }
+
+        convertTime(time, fromTimezone, toTimezone) {
+          const [hours, minutes] = time.split(":");
+          const date = new Date();
+          date.setHours(hours, minutes);
+
+          const fromTime = new Date(
+            date.toLocaleString("en-US", { timeZone: fromTimezone })
+          );
+          const toTime = new Date(
+            date.toLocaleString("en-US", { timeZone: toTimezone })
+          );
+
+          return toTime.toLocaleTimeString("en-US", {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false,
+          });
+        }
+
+        setupEventListeners() {
+          document
+            .getElementById("prev-month")
+            .addEventListener("click", () => {
+              this.currentDate.setMonth(this.currentDate.getMonth() - 1);
+              this.renderCalendar();
+            });
+
+          document
+            .getElementById("next-month")
+            .addEventListener("click", () => {
+              this.currentDate.setMonth(this.currentDate.getMonth() + 1);
+              this.renderCalendar();
+            });
+
+          document
+            .getElementById("timezoneSelect")
+            .addEventListener("change", () => {
+              this.updateCurrentTime();
+              this.renderCalendar();
+            });
+
+          document
+            .getElementById("eventStartTime")
+            .addEventListener("change", () => {
+              this.updateTimezoneConvert();
+            });
+
+          document
+            .getElementById("eventEndTime")
+            .addEventListener("change", () => {
+              this.updateTimezoneConvert();
+            });
+        }
+
+        updateTimezoneConvert() {
+          const startTime = document.getElementById("eventStartTime").value;
+          const endTime = document.getElementById("eventEndTime").value;
+          const selectedTimezone =
+            document.getElementById("timezoneSelect").value;
+          const convertDiv = document.getElementById("timezoneConvert");
+
+          if (startTime && endTime) {
+            const conversions = this.getTimezones()
+              .filter((tz) => tz !== selectedTimezone)
+              .map((tz) => {
+                const convertedStart = this.convertTime(
+                  startTime,
+                  selectedTimezone,
+                  tz
+                );
+                const convertedEnd = this.convertTime(
+                  endTime,
+                  selectedTimezone,
+                  tz
+                );
+                return `${tz}: ${convertedStart} - ${convertedEnd}`;
+              });
+
+            convertDiv.innerHTML = `<strong>Time in other zones:</strong><br>${conversions.join(
+              "<br>"
+            )}`;
+          }
+        }
+
+        showAddEventModal(date) {
+          this.selectedDate = date;
+          this.editingEventId = null;
+
+          document.getElementById("modalDate").textContent =
+            date.toLocaleDateString("default", {
+              weekday: "long",
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+              timeZone: document.getElementById("timezoneSelect").value,
+            });
+
+          document.getElementById("eventTitle").value = "";
+          document.getElementById("eventDescription").value = "";
+          document.getElementById("eventStartTime").value = "";
+          document.getElementById("eventEndTime").value = "";
+          document.getElementById("timezoneConvert").innerHTML = "";
+
+          document.getElementById("eventModal").style.display = "flex";
+        }
+
+        saveEvent() {
+          const title = document.getElementById("eventTitle").value.trim();
+          const description = document
+            .getElementById("eventDescription")
+            .value.trim();
+          const startTime = document.getElementById("eventStartTime").value;
+          const endTime = document.getElementById("eventEndTime").value;
+          const timezone = document.getElementById("timezoneSelect").value;
+
+          if (title && this.selectedDate && startTime && endTime) {
+            const dateKey = this.getDateKey(this.selectedDate);
+            const eventData = {
+              id: this.editingEventId || Date.now(),
+              title,
+              description,
+              startTime,
+              endTime,
+              timezone,
+            };
+
+            if (!this.events[dateKey]) this.events[dateKey] = [];
+            if (this.editingEventId) {
+              const index = this.events[dateKey].findIndex(
+                (e) => e.id === this.editingEventId
+              );
+              if (index !== -1) this.events[dateKey][index] = eventData;
+            } else {
+              this.events[dateKey].push(eventData);
+            }
+
+            this.saveEvents();
+            this.closeModal();
+            this.renderCalendar();
+          }
+        }
+
+        closeModal() {
+          document.getElementById("eventModal").style.display = "none";
+          this.editingEventId = null;
+        }
+
+        renderCalendar() {
+          const grid = document.getElementById("calendar-grid");
+          while (grid.children.length > 7) {
+            grid.removeChild(grid.lastChild);
+          }
+
+          const currentMonth = this.currentDate.getMonth();
+          const currentYear = this.currentDate.getFullYear();
+
+          document.getElementById(
+            "current-month"
+          ).textContent = `${this.currentDate.toLocaleString("default", {
+            month: "long",
+            timeZone: this.userTimezone,
+          })} ${currentYear}`;
+
+          const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+          const totalDays = new Date(
+            currentYear,
+            currentMonth + 1,
+            0
+          ).getDate();
+
+          for (let i = 0; i < firstDay; i++) this.createDayElement(null, true);
+
+          for (let day = 1; day <= totalDays; day++) {
+            this.createDayElement(day, false);
+          }
+
+          const totalCells = 42;
+          const filledCells = firstDay + totalDays;
+          for (let day = 1; day <= totalCells - filledCells; day++)
+            this.createDayElement(null, true);
+        }
+
+        createDayElement(day, isEmpty) {
+          const dayCell = document.createElement("div");
+          dayCell.className = "calendar-day";
+          dayCell.style.backgroundColor = isEmpty ? "transparent" : "#fff";
+
+          if (!isEmpty) {
+            dayCell.textContent = day;
+            dayCell.addEventListener("click", () =>
+              this.showAddEventModal(
+                new Date(
+                  this.currentDate.getFullYear(),
+                  this.currentDate.getMonth(),
+                  day
+                )
+              )
+            );
+
+            const dateKey = this.getDateKey(
+              new Date(
+                this.currentDate.getFullYear(),
+                this.currentDate.getMonth(),
+                day
+              )
+            );
+            const eventsOnDay = this.events[dateKey] || [];
+            eventsOnDay.forEach((event) => {
+              const eventDiv = document.createElement("div");
+              eventDiv.className = "event";
+              eventDiv.innerHTML = `<div class="event-title">${event.title}</div><div class="event-time">${event.startTime} - ${event.endTime}</div>`;
+              dayCell.appendChild(eventDiv);
+            });
+          }
+
+          document.getElementById("calendar-grid").appendChild(dayCell);
+        }
+
+        getDateKey(date) {
+          return `${date.getFullYear()}-${
+            date.getMonth() + 1
+          }-${date.getDate()}`;
+        }
+      }
+
+      const calendar = new TimezoneCalendar();
+    </script>
+  </body>
+</html>
