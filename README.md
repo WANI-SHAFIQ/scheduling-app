@@ -10,12 +10,12 @@ Frontend | Backend | Fullstack
 
 ## Deployed App
 
-- **Frontend**: [SchedPro Frontend](https://your-frontend-link)
+- **Frontend**: https://schedpro.netlify.app/
 - **Backend**: Firebase Services
 
 ## Directory Structure
 
-```bash
+bash
 schedpro/
 ├─ index.html
 ├─ dashboard.html
@@ -56,19 +56,19 @@ Follow these steps to set up and run the project locally:
 3. **Deploy the app using Firebase CLI** (optional):
    - Install Firebase CLI:
 
-     ```bash
+     ``bash
      npm install -g firebase-tools
      ```
 
    - Log in to Firebase:
 
-     ```bash
+     ``bash
      firebase login
      ```
 
    - Deploy:
 
-     ```bash
+     ``bash
      firebase deploy
      ```
 
